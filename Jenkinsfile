@@ -13,20 +13,21 @@ pipeline {
 
     stage('Build') {
       steps {
-        sh 'mvn -B -DskipTests clean package'
+        bat 'mvn -B -DskipTests clean package'
       }
     }
 
     stage('Test + JaCoCo') {
       steps {
-        sh 'mvn -B test jacoco:report'
+        bat 'mvn -B test jacoco:report'
       }
       post {
         always {
-          archiveArtifacts artifacts: 'target/*.jar', fingerprint: true
+          // Petclinic often produces a .war; archive both just in case
+          archiveArtifacts artifacts: 'target/*.war, target/*.jar', fingerprint: true
           junit 'target/surefire-reports/*.xml'
           publishHTML(target: [
-            allowMissing: false,
+            allowMissing: true,              // avoid failing if report folder missing
             alwaysLinkToLastBuild: true,
             keepAll: true,
             reportDir: 'target/site/jacoco',
