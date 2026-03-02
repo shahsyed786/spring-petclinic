@@ -11,11 +11,14 @@ public class GreetingController {
     public String greeting() {
 
         int hour = LocalTime.now().getHour();
+        String message;
 
         if (hour < 12) {
-            return "Good morning, Shah Syed, Welcome to COMP367";
+            message = "Good morning, Shah Syed, Welcome to COMP367";
         } else {
-            return "Good afternoon, Shah Syed, Welcome to COMP367";
+            message = "Good afternoon, Shah Syed, Welcome to COMP367";
         }
+
+        return message;
     }
 }
